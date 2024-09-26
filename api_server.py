@@ -10,6 +10,7 @@ import sys
 import requests
 import argparse
 
+# watchdog 可以用于监控指定文件类型的变化。你可以根据不同的文件类型或特定文件名来触发事件处理逻辑。
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import uvicorn
@@ -32,18 +33,28 @@ template_str = prompts.get_prompt(config.prompts.version)
 
 
 class CustomFileChangeHandler(FileSystemEventHandler):
+    """
+    CustomFileChangeHandler 是一个自定义的文件系统事件处理器，它会检查文件变化事件的路径，
+    并判断是否在排除列表 dont_watch_files_list 中。如果不是排除的文件发生了变化，就会触发应用重启。
+    """
     def __init__(self, dont_watch_files_list):
         super().__init__()
         self.files_dont_watch = dont_watch_files_list
 
     def on_modified(self, event):
+        """重写了 on_modified 方法"""
         if not any(event.src_path.endswith(file) for file in self.files_dont_watch):
+            # 如果不包含在dont_watch_files_list的文件发生了变化，就触发重启。
             print(f"File {event.src_path} changed, restarting...")
             restart_program()  # Use exit code 3 to trigger a restart
 
 
 def restart_program():
     python = sys.executable
+    # os.execl函数用于在一个程序内启动另一个程序，并且用新的程序替换当前进程。它不会创建新的进程，而是替换当前进程
+    # python：这是要启动的程序的路径名，这里表示Python解释器的路径。
+    # python：这是新程序的名字，通常，它与路径名相同。
+    # *sys.argv：这是新程序的命令行参数列表，*sys.argv表示保留原程序的命令行参数。
     os.execl(python, python, * sys.argv)
 
 
