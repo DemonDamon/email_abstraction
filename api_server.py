@@ -23,6 +23,8 @@ from loguru import logger
 from config import load_config
 from utils import colorstr
 import prompts
+from preprocessor import PreprocessorFactory
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="config.json", help="config file path")
@@ -61,6 +63,12 @@ def restart_program():
 def create_app():
     _app = Sanic("email_intelli_abstract_service")
     CORS(_app, origins="*")
+
+    def handle_request(email_content, preprocessor_type="regex"):
+        preprocessor = PreprocessorFactory.get_preprocessor(preprocessor_type)
+        processed_content = preprocessor.preprocess(email_content)
+
+        return processed_content
 
     def call_llm_api(prompt):
         """调用大模型API"""
@@ -112,6 +120,9 @@ def create_app():
             return json({"code": 1, "message": "Invalid request: 'email_content' missing", "text": ""})
 
         email_content = req_json_body["email_content"]
+
+        # 预处理邮件内容，包括隐藏邮箱地址、电话号码、身份证号码、URL、个人简介签名等
+        email_content = handle_request(email_content)
 
         llm_out_json = generate_email_summary(email_content)
         out = llm_output_parser(llm_out_json)

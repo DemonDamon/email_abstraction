@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export http_proxy=http://10.0.0.5:3128; export https_proxy=http://10.0.0.5:3128
+export http_proxy=http://10.0.0.5:3128; export https_proxy=https://10.0.0.5:3128
 
 # 定义进程名称和路径
 root_path="/opt/liziran/email_abstraction"
