@@ -19,12 +19,13 @@ import json
 export http_proxy=http://10.0.0.5:3128; export https_proxy=http://10.0.0.5:3128
 """
 
-url = "http://192.168.32.113:7820/aibox/v1/llm/chat/completions"
-
+# url = "http://192.168.32.113:7820/aibox/v1/llm/chat/completions"
+url = 'http://192.168.32.151:6821/aibox/v1/openai/chat/completions'
 
 payload = json.dumps({
    "request_id": "test-jbjsax-89ujwbjdq-dbjdh8",
-   "model": "Qwen1.5-32B-Chat-GPTQ-Int4",
+   # "model": "Qwen1.5-32B-Chat-GPTQ-Int4",
+   "model": "Qwen2.5-72B-Instruct-GPTQ-Int4",
    "messages": [
       {
          "role": "system",
