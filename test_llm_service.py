@@ -5,12 +5,6 @@
 # E-mail  : bingzhenli@hotmail.com
 
 
-# Date    : 2024/9/17 14:54
-# File    : test_llm_service.py
-# Desc    :
-# Author  : Damon
-# E-mail  : bingzhenli@hotmail.com
-
 import requests
 import json
 
