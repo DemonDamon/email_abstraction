@@ -10,7 +10,7 @@
         }
     },
     "prompts": {
-        "version": "v3",
+        "version": "v4",
         "path": "prompts.yaml"
     }
 }
